@@ -248,7 +248,7 @@ async function connect() {
   localStorage.setItem('op_token', opToken);
 
   try {
-    const resp = await fetch('/api/v3/users/me', {
+    const resp = await fetch(opUrl + '/api/v3/users/me', {
       headers: { 'Authorization': 'Basic ' + btoa('apikey:' + opToken), 'Content-Type': 'application/json' }
     });
     if (resp.ok) {
