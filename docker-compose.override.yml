@@ -1,0 +1,21 @@
+# docker-compose.override.yml
+# Adds Cloudflare Tunnel to expose OpenProject via your domain.
+# Docker Compose merges this automatically with docker-compose.yml.
+#
+# HOW IT WORKS:
+#   - cloudflared connects outbound to Cloudflare - no inbound ports needed
+#   - In CF Zero Trust dashboard, set public hostname to: http://proxy:80
+#   - OpenProject's built-in MCP server is at: https://yourdomain.com/mcp
+#     (requires Enterprise license - use API token auth)
+
+services:
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run
+    environment:
+      TUNNEL_TOKEN: "${TUNNEL_TOKEN}"
+    networks:
+      - frontend
+    depends_on:
+      - proxy
